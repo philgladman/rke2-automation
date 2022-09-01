@@ -41,7 +41,7 @@ do
         # file has output - success - leave the loop:
         echo "cloudformation stack creation complete"
         aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Outputs[].[OutputKey,OutputValue]" --region us-east-1 --output text > ~/rke2-automation/create-ec2-instances/script-output.json
-        rm ~/rke2-automation/create-ec2-instances/script-output.json
+        rm ~/rke2-automation/create-ec2-instances/tmp-script-output.json
         break
     fi
 done
