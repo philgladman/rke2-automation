@@ -1,13 +1,13 @@
 [master]
-master ansible_host="{{ master_ipaddress }}" ansible_connection=ssh ansible_user="{{ default_user }}"  ansible_ssh_private_key_file="{{ ssh_private_key_file }}"
+master ansible_host="{{ master_ipaddress }}" ansible_connection=ssh ansible_user="{{ default_user }}"  ansible_ssh_private_key_file="{{ ssh_private_key_file }}" ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [workers]
-worker01 ansible_host="{{ worker01_ipaddress }}" ansible_connection=ssh ansible_user="{{ default_user }}"  ansible_ssh_private_key_file="{{ ssh_private_key_file }}"
-worker02 ansible_host="{{ worker02_ipaddress }}" ansible_connection=ssh ansible_user="{{ default_user }}"  ansible_ssh_private_key_file="{{ ssh_private_key_file }}"
-worker03 ansible_host="{{ worker03_ipaddress }}" ansible_connection=ssh ansible_user="{{ default_user }}"  ansible_ssh_private_key_file="{{ ssh_private_key_file }}"
+worker01 ansible_host="{{ worker01_ipaddress }}" ansible_connection=ssh ansible_user="{{ default_user }}"  ansible_ssh_private_key_file="{{ ssh_private_key_file }}" ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+worker02 ansible_host="{{ worker02_ipaddress }}" ansible_connection=ssh ansible_user="{{ default_user }}"  ansible_ssh_private_key_file="{{ ssh_private_key_file }}" ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+worker03 ansible_host="{{ worker03_ipaddress }}" ansible_connection=ssh ansible_user="{{ default_user }}"  ansible_ssh_private_key_file="{{ ssh_private_key_file }}" ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [bastion]
-bastion ansible_host="{{ bastion_ipaddress }}" ansible_connection=ssh ansible_user="{{ default_user }}"  ansible_ssh_private_key_file="{{ ssh_private_key_file }}"
+bastion ansible_host="{{ bastion_ipaddress }}" ansible_connection=ssh ansible_user="{{ default_user }}"  ansible_ssh_private_key_file="{{ ssh_private_key_file }}" ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [cluster:children]
 master

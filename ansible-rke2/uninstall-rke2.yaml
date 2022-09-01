@@ -1,4 +1,4 @@
-- name: Unistall RKE2
+- name: Unistall RKE2 and cleanup after RKE2
   hosts: cluster
   become: yes
   become_method: sudo
