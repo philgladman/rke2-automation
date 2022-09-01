@@ -3,7 +3,7 @@ import os
 print("-----start-----")
 
 ## or open file with this > with open
-with open(os.path.expanduser('~/rke2-automation/script-output.json'), 'r') as test_outputs_file:
+with open(os.path.expanduser('~/rke2-automation/create-ec2-instances/script-output.json'), 'r') as test_outputs_file:
     test_data = json.load(test_outputs_file)
 
     for i in test_data:
