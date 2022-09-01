@@ -2,6 +2,9 @@
 #export STACK_NAME=test01
 #aws cloudformation create-stack --stack-name $STACK_NAME --template-body file:///Users/Philgladman/Desktop/DevOps/cloudformation/create-cluster.yml --region us-east-1
 
+### Query aws for the bastions private IP address and output into the ansible group_vars/all file
+echo bastion_ipaddress: $(aws ec2 describe-instances --region us-east-1 --query "Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddress" --filters Name=tag:Name,Values=bastion-host --output text) >> ~/rke2-automation/ansible-rke2/group_vars/all
+
 ### checks to make sure arg is provide for stack name
 if [[ $# -eq "" ]] ; then
     echo 'you must specify the cloudformation stack name'

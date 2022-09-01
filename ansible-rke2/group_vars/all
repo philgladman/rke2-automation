@@ -4,4 +4,3 @@ home_dir: home/ubuntu
 default_user: ubuntu
 ec2_user_home_dir: home/ec2-user
 ec2_user_default_user: ec2-user
-bastion_ipaddress: 
