@@ -12,7 +12,7 @@ fi
 export STACK_NAME=$1
 
 ### create cloudformation  stack
-aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://~/rke-automation/create-cluster.yml --region us-east-1
+aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://~/rke2-automation/create-cluster.yml --region us-east-1
 
 ### show progress bar that takes 30 seconds
 {
