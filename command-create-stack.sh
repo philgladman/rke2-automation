@@ -26,7 +26,7 @@ aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://
 }
 
 ### check to see if outputs are available and put into file
-aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Outputs[].[OutputKey,OutputValue]" --output text > tmp-script-output.json
+aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Outputs[].[OutputKey,OutputValue]" --region us-east-1 --output text > tmp-script-output.json
 
 ### check to see if outputs file is empty, if so then then run loop until there are outputs and put in file
 while true # infinite loop
@@ -36,11 +36,11 @@ do
     then
         # output is empty - failure - rerun aws command:
         echo "cloudformation stack outputs are empty, waiting for stack to complete..."
-        aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Outputs[].[OutputKey,OutputValue]" --output text > tmp-script-output.json
+        aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Outputs[].[OutputKey,OutputValue]" --region us-east-1 --output text > tmp-script-output.json
     else
         # file has output - success - leave the loop:
         echo "cloudformation stack creation complete"
-        aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Outputs[].[OutputKey,OutputValue]" --output text > script-output.json
+        aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Outputs[].[OutputKey,OutputValue]" --region us-east-1 --output text > script-output.json
         rm tmp-script-output.json
         break
     fi
