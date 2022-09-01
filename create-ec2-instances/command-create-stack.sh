@@ -39,6 +39,7 @@ do
     then
         # output is empty - failure - rerun aws command:
         echo "cloudformation stack outputs are empty, waiting for stack to complete..."
+        sleep 3s
         aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Outputs[].[OutputKey,OutputValue]" --region us-east-1 --output text > ~/rke2-automation/create-ec2-instances/tmp-script-output.json
     else
         # file has output - success - leave the loop:
