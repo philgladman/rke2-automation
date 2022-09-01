@@ -21,7 +21,7 @@ Resources:
           Encrypted: "true"
           KmsKeyId: "a993d3be-913f-4a76-be2e-c5294b39a7b5"
       ImageId: !Ref LatestUbuntuFocalAMI
-      InstanceType: "t2.nano"
+      InstanceType: "t3.medium"
       KeyName: "bastion_key"
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
@@ -48,7 +48,7 @@ Resources:
           Encrypted: "true"
           KmsKeyId: "a993d3be-913f-4a76-be2e-c5294b39a7b5"
       ImageId: !Ref LatestUbuntuFocalAMI
-      InstanceType: "t2.nano"
+      InstanceType: "t3.medium"
       KeyName: "bastion_key"
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
@@ -75,7 +75,7 @@ Resources:
           Encrypted: "true"
           KmsKeyId: "a993d3be-913f-4a76-be2e-c5294b39a7b5"
       ImageId: !Ref LatestUbuntuFocalAMI
-      InstanceType: "t2.nano"
+      InstanceType: "t3.medium"
       KeyName: "bastion_key"
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
@@ -102,7 +102,8 @@ Resources:
           Encrypted: "true"
           KmsKeyId: "a993d3be-913f-4a76-be2e-c5294b39a7b5"
       ImageId: !Ref LatestUbuntuFocalAMI
-      InstanceType: "t2.nano"
+      InstanceType: "t3.medium
+      "
       KeyName: "bastion_key"
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
