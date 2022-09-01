@@ -1,0 +1,14 @@
+1.) create machines
+2.) sudo apt update
+3.) sudo apt install ansible -y
+4.) generate ssh keys and add to authorized_keys for each worker node
+5.) clone git repo - git clone https://gitlab.com/philgman1121/home-rpi-cluster.git
+6.) edit ansible files(inverntory.txt, group_vars/all, and update-hostnames.yml)
+7.) run ansible-playbook update-hostnames.yml -i inventory.txt
+8.) run ansible-playbook install-latest-k8s.yml -i inventory.txt
+9.) add worker nodes
+
+### Single node cluster
+1.) untaint master node
+    kubectl taint nodes --all node-role.kubernetes.io/master-
+    kubectl taint nodes --all node-role.kubernetes.io/control-plane-

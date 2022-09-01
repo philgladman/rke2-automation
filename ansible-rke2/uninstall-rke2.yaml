@@ -1,0 +1,9 @@
+- name: Unistall RKE2
+  hosts: cluster
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: run rke2-killall.sh
+      shell: /usr/local/bin/rke2-killall.sh
+    - name: run rke2-uninstall.sh
+      shell: /usr/local/bin/rke2-uninstall.sh

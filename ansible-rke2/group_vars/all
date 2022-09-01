@@ -1,0 +1,11 @@
+bastion_ipaddress: 
+master_localhost_ipaddress: 
+master_ipaddress: 
+worker01_ipaddress: 
+worker02_ipaddress: 
+worker03_ipaddress: 
+ssh_private_key_file: /home/ubuntu/.ssh/id_rsa
+home_dir: home/ubuntu
+default_user: ubuntu
+ec2_user_home_dir: home/ec2-user
+ec2_user_default_user: ec2-user

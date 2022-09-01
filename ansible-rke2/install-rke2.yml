@@ -1,0 +1,118 @@
+- name: Prepare for and install RKE2
+  hosts: cluster
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Update System Package Cache
+      apt:
+        update_cache: yes
+
+- name: Install RKE2 on master
+  hosts: master
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: download and run RKE2 installer
+      shell: curl -sfL https://get.rke2.io | sh - 
+    - name: enable and start RKE2 service
+      systemd:
+        name: rke2-server.service
+        state: started
+        enabled: yes
+        daemon_reload: yes
+    - name: create .kube directory for master
+      file:
+        path: "/{{ home_dir }}/.kube"
+        state: directory
+        owner: "{{ default_user }}"
+        group: "{{ default_user }}"
+        mode: '0755'
+    - name: create config file
+      file:
+        path: "/{{ home_dir }}/.kube/config"
+        state: touch
+        owner: "{{ default_user }}"
+        group: "{{ default_user }}"
+        mode: '0600'
+    - name: Copy config file to /home/ubuntu/.kube/config
+      command: "sudo cp /etc/rancher/rke2/rke2.yaml /{{ home_dir }}/.kube/config"
+
+    - name: add kubectl to path
+      shell: export PATH=/var/lib/rancher/rke2/bin/:$PATH
+    - name: add kubectl to path
+      shell: "echo export PATH=/var/lib/rancher/rke2/bin/:$PATH >> /{{ home_dir }}/.bashrc"
+
+    - name: Copy token on master to home dir
+      shell: "sudo cp /var/lib/rancher/rke2/server/node-token /{{ home_dir }}/node-token"
+    - name: change token file perms
+      file: 
+        path: "/{{ home_dir }}/node-token"
+        state: touch
+        owner: "{{ default_user }}"
+        group: "{{ default_user }}"
+        mode: '0644'
+
+
+- name: Install RKE2 on workers
+  hosts: workers
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: download and run RKE2 installer
+      shell: curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -
+    - name: enable RKE2 service
+      systemd:
+        name: rke2-agent.service
+        enabled: yes
+    - name: create /etc/rancher
+      file:
+        path: "/etc/rancher"
+        state: directory
+        owner: "{{ default_user }}"
+        group: "{{ default_user }}"
+        mode: '0755'
+    - name: create /etc/rancher/rke2
+      file:
+        path: "/etc/rancher/rke2"
+        state: directory
+        owner: "{{ default_user }}"
+        group: "{{ default_user }}"
+        mode: '0755'
+    - name: create /etc/rancher/rke2/config.yaml
+      file:
+        path: "/etc/rancher/rke2/config.yaml"
+        state: touch
+        owner: "{{ default_user }}"
+        group: "{{ default_user }}"
+        mode: '0644'
+    
+    
+    - name: Copy token from master, to workers
+      copy:
+        remote_src: no
+        src: "/{{ home_dir }}/node-token"
+        dest: "/{{ home_dir }}/node-token"
+   
+    - name: edit /etc/rancher/rke2/config.yaml
+      lineinfile:
+        path: /etc/rancher/rke2/config.yaml
+        line: "server: https://{{ master_ipaddress }}:9345"
+        create: yes
+
+    - name: add node token to /etc/rancher/rke2/config.yaml
+      shell: "echo token: $(cat /{{ home_dir }}/node-token) >> /etc/rancher/rke2/config.yaml"
+
+    - name: Start RKE2 service
+      systemd:
+        name: rke2-agent.service
+        state: started
+        enabled: yes
+        daemon_reload: yes
+
+- name: Node token clean up
+  hosts: cluster
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: delete node token
+      command: sudo rm /{{ home_dir }}/node-token

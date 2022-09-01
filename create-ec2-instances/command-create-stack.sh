@@ -31,7 +31,7 @@ aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Ou
 ### check to see if outputs file is empty, if so then then run loop until there are outputs and put in file
 while true # infinite loop
 do
-    output=$( cat script-output.json )
+    output=$( cat tmp-script-output.json )
     if [ -z "$output" ]
     then
         # output is empty - failure - rerun aws command:
@@ -49,4 +49,4 @@ done
 ### run python script to take output file and format to ansible variables file
 python3 script-1.py
 
-rm -rf script-output.json
+rm -f script-output.json
