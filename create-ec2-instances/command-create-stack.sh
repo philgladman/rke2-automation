@@ -31,7 +31,7 @@ aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Ou
 ### check to see if outputs file is empty, if so then then run loop until there are outputs and put in file
 while true # infinite loop
 do
-    output=$( cat ~/rke2-automation/create-ec2-instances/script-output.json )
+    output=$( cat ~/rke2-automation/create-ec2-instances/tmp-script-output.json )
     if [ -z "$output" ]
     then
         # output is empty - failure - rerun aws command:
