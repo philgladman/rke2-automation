@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Create Bastion EC2 Instance"
+
+Parameters:
+  LatestUbuntuFocalAMI:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/canonical/ubuntu/server/focal/stable/current/amd64/hvm/ebs-gp2/ami-id
+
+Resources:  
+  BastionEC2: 
+    DeletionPolicy: "Delete"
+    Type: AWS::EC2::Instance
+    Properties: 
+      AvailabilityZone: "us-east-1b"
+      BlockDeviceMappings: 
+      - DeviceName: "/dev/sda1"
+        Ebs: 
+          VolumeType: "gp2"
+          DeleteOnTermination: "true"
+          VolumeSize: "30"
+          Encrypted: "true"
+          KmsKeyId: "a993d3be-913f-4a76-be2e-c5294b39a7b5"
+      IamInstanceProfile: "ROL-bastion-ec2"
+      ImageId: !Ref LatestUbuntuFocalAMI
+      InstanceType: "t2.micro"
+      KeyName: "redhat_test"
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeleteOnTermination: "true"
+          DeviceIndex: "0"
+          GroupSet:
+            - "sg-0394394f8fa9cf323"
+          SubnetId: "subnet-f838619e"
+      Tags:
+        - Key: "Name"
+          Value: "bastion-host"
+
+Outputs:
+  BastionPublicIP:
+    Description: Public IP Address of ec2 instance
+    Value:
+      Fn::GetAtt:
+        - BastionEC2
+        - PublicIp
+  BastionPrivateIP:
+    Description: Private IP Address of ec2 instance
+    Value:
+      Fn::GetAtt:
+        - BastionEC2
+        - PrivateIp
