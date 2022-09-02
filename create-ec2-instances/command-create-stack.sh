@@ -56,7 +56,7 @@ python3 ~/rke2-automation/create-ec2-instances/script-1.py
 rm -f ~/rke2-automation/create-ec2-instances/script-output.json
 
 # run ansible playbook on bastion to update hostnames
-## ansible-playbook -i /home/ubuntu/rke2-automation/ansible-rke2/inventory.txt /home/ubuntu/rke2-automation/ansible-rke2/update-hostnames.yml
+ansible-playbook -i /home/ubuntu/rke2-automation/ansible-rke2/inventory.txt /home/ubuntu/rke2-automation/ansible-rke2/update-hostnames.yml
 
 # run ansible playbook to install RKE2 on all nodes
-## ansible-playbook -i /home/ubuntu/rke2-automation/ansible-rke2/inventory.txt /home/ubuntu/rke2-automation/ansible-rke2/install-rke2-bastion.yml
+ansible-playbook -i /home/ubuntu/rke2-automation/ansible-rke2/inventory.txt /home/ubuntu/rke2-automation/ansible-rke2/install-rke2-bastion.yml

@@ -53,7 +53,21 @@ export LOCAL_KEY=/Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-20
 export BASTION_KEY=/Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-2022/aws-redhat-test/bastion_key.pem
 
 ## run this command on mac to transfer bastion private key from mac to bastion
-scp -i $LOCAL_KEY -o StrictHostKeyChecking=no $BASTION_KEY ubuntu@$BASTION_PUBLIC_IP:~/.ssh/id_rsa 
+while true # infinite loop
+do
+    scp -i $LOCAL_KEY -o StrictHostKeyChecking=no $BASTION_KEY ubuntu@$BASTION_PUBLIC_IP:~/.ssh/id_rsa 
+    RESULT=$?
+    if [ $RESULT -eq 0 ];
+    then
+        # SUCCESS
+        echo "file transfer Success"
+        break
+    else
+        # FAIL
+        echo "ERROR ! file transfer FAILED... trying again"
+        sleep 1s
+    fi
+done
 
 ## Command to ssh into bastion
 echo "ssh -i $LOCAL_KEY ubuntu@$BASTION_PUBLIC_IP"
