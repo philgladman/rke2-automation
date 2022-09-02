@@ -5,10 +5,12 @@
 echo "Test to see if user data worked" > test.txt
 sudo apt update
 sudo apt install curl unzip ansible git ca-certificates -y
+# install kubectl
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 sudo apt-get update
 sudo apt-get install -y kubectl
+#install awscli
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 sudo unzip awscliv2.zip
 sudo ./aws/install
@@ -16,6 +18,7 @@ export PATH=/usr/local/bin:$PATH
 echo "export PATH=/usr/local/bin:$PATH" >> .bashrc
 rm -rf aws
 rm -rf awscliv2.zip
+# clone git repo and set up keys on bastion
 git clone https://github.com/philgladman/rke2-automation.git /home/ubuntu/rke2-automation
 aws ec2 describe-key-pairs --key-names bastion_key --include-public-key --query "KeyPairs[].PublicKey" --output text --region us-east-1 >  /home/ubuntu/.ssh/id_rsa.pub
 cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
