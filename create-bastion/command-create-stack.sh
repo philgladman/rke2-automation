@@ -56,5 +56,5 @@ export BASTION_KEY=/Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-
 scp -i $LOCAL_KEY $BASTION_KEY ubuntu@$BASTION_PUBLIC_IP:~/.ssh/id_rsa -o StrictHostKeyChecking=no
 
 ## Command to ssh into bastion
-## ssh -i $LOCAL_KEY ubuntu@$BASTION_PUBLIC_IP
+echo "ssh -i $LOCAL_KEY ubuntu@$BASTION_PUBLIC_IP"
 ### END
