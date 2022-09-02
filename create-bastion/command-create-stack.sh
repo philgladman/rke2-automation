@@ -65,10 +65,13 @@ do
     else
         # FAIL
         echo "ERROR ! file transfer FAILED... trying again"
-        sleep 1s
+        sleep 2s
     fi
 done
 
 ## Command to ssh into bastion
+echo " "
+echo "#### Copy and past command below to ssh into bastion ####"
+echo " "
 echo "ssh -i $LOCAL_KEY ubuntu@$BASTION_PUBLIC_IP"
 ### END

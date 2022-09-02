@@ -55,6 +55,24 @@ python3 ~/rke2-automation/create-ec2-instances/script-1.py
 
 rm -f ~/rke2-automation/create-ec2-instances/script-output.json
 
+### ansible readiness probe to see if nodes are ready to ssh
+
+while true # infinite loop
+do
+    ansible -m ping all -i ~/rke2-automation/ansible-rke2/inventory.txt  
+    RESULT=$?
+    if [ $RESULT -eq 0 ];
+    then
+        # SUCCESS
+        echo "Success, all nodes are ready"
+        break
+    else
+        # FAIL
+        echo "FAILURE, one or more nodes are not yet ready... Trying agin"
+        sleep 2s
+    fi
+done
+
 # run ansible playbook on bastion to update hostnames
 ansible-playbook -i /home/ubuntu/rke2-automation/ansible-rke2/inventory.txt /home/ubuntu/rke2-automation/ansible-rke2/update-hostnames.yml
 
