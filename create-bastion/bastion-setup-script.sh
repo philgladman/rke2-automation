@@ -4,7 +4,11 @@
 ## - download awscli, curl, unzip, and ansible on bastion
 echo "Test to see if user data worked" > test.txt
 sudo apt update
-sudo apt install curl unzip ansible git -y
+sudo apt install curl unzip ansible git ca-certificates -y
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubectl
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 sudo unzip awscliv2.zip
 sudo ./aws/install
