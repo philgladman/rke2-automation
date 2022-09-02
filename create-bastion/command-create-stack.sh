@@ -1,7 +1,16 @@
 #!/bin/bash
 ## This script is to be run on local mac
 ### put file location of stack into variable
-export STACK_FILE_LOCATION=/Users/Philgladman/Desktop/DevOps/rke2-automation/create-ec2-instances/create-bastion-user-data.yml
+export STACK_FILE_LOCATION=/Users/Philgladman/Desktop/DevOps/rke2-automation/create-bastion/create-bastion-user-data.yml
+
+### checks to make sure arg is provide for stack name
+if [[ $# -eq "" ]] ; then
+    echo 'you must specify the cloudformation stack name'
+    exit 0
+fi
+
+### put arg for stack name in variable
+export STACK_NAME=$1
 
 ### create cloudformation stack
 aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://$STACK_FILE_LOCATION --region us-east-1
@@ -24,16 +33,15 @@ aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Ou
 while true # infinite loop
 do
     output=$( cat ~/tmp-script-output.json )
-    if ["$output" -ne "running"]
+    if [ -z "$output" ]
     then
-        # ec2 instance is not yet running - failure - rerun aws command:
-        echo "bastion instance is not yet running, waiting for stack to complete..."
+        # output is empty - failure - rerun aws command:
+        echo "cloudformation stack outputs are empty, waiting for stack to complete..."
         sleep 3s
         aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Outputs[].[OutputKey,OutputValue]" --region us-east-1 --output text > ~/tmp-script-output.json
     else
         # file has output - success - leave the loop:
-        echo "cloudformation stack creation complete and bastion is running"
-        # aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[].Outputs[].[OutputKey,OutputValue]" --region us-east-1 --output json > ~/script-output.json
+        echo "cloudformation stack creation complete"
         rm ~/tmp-script-output.json
         break
     fi
@@ -47,4 +55,6 @@ export BASTION_KEY=/Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-
 ## run this command on mac to transfer bastion private key from mac to bastion
 scp -i $LOCAL_KEY $BASTION_KEY ubuntu@$BASTION_PUBLIC_IP:~/.ssh/id_rsa -o StrictHostKeyChecking=no
 
+## Command to ssh into bastion
+## ssh -i $LOCAL_KEY ubuntu@$BASTION_PUBLIC_IP
 ### END

@@ -46,9 +46,9 @@ Resources:
           echo "export PATH=/usr/local/bin:$PATH" >> .bashrc
           rm -rf aws
           rm -rf awscliv2.zip
-          git clone https://github.com/philgladman/rke2-automation.git
-          aws ec2 describe-key-pairs --key-names bastion_key --include-public-key --query "KeyPairs[].PublicKey" --output text --region us-east-1 >  ~/.ssh/id_rsa.pub
-          cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+          git clone https://github.com/philgladman/rke2-automation.git /home/ubuntu/rke2-automation
+          aws ec2 describe-key-pairs --key-names bastion_key --include-public-key --query "KeyPairs[].PublicKey" --output text --region us-east-1 >  /home/ubuntu/.ssh/id_rsa.pub
+          cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
 
 Outputs:
   BastionPublicIP:

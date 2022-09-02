@@ -2,6 +2,7 @@
 
 ## USER DATA for ec2 instance
 ## - download awscli, curl, unzip, and ansible on bastion
+echo "Test to see if user data worked" > test.txt
 sudo apt update
 sudo apt install curl unzip ansible git -y
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -14,6 +15,7 @@ rm -rf awscliv2.zip
 git clone https://github.com/philgladman/rke2-automation.git
 aws ec2 describe-key-pairs --key-names bastion_key --include-public-key --query "KeyPairs[].PublicKey" --output text --region us-east-1 >  ~/.ssh/id_rsa.pub
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+echo "last commmand of user data" >> test.txt
 
 ### get BASTION public IP, and both keys into a variable
 export BASTION_PUBLIC_IP=$(aws ec2 describe-instances --query "Reservations[].Instances[].NetworkInterfaces[].Association.PublicIp" --filters Name=tag:Name,Values=bastion-host --output text --region us-east-1)
