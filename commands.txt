@@ -1,0 +1,22 @@
+#### Commands to run locally #### 
+
+## Clone git repo
+1.) git clone https://github.com/philgladman/rke2-automation.git
+
+## run command to create bastion
+2.) ./rke2-automation/create-bastion/command-create-stack-v2.sh
+
+## ssh into bastion
+3.) copy and paste ssh command from output
+
+
+#### Commands to run on bastion #### 
+
+## confirm that bastion is ready
+4.) ls -la on bastion to see rk2-automation dir
+
+## run command to create cluster
+5.) ./rke2-automation/create-ec2-instances/command-create-stack.sh
+
+## run kubectl to confirm cluster is up
+5.) kubectl get nodes -w
