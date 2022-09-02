@@ -1,16 +1,26 @@
 #!/bin/bash
 ## This script is to be run on local mac
-### put file location of stack into variable
-export STACK_FILE_LOCATION=/Users/Philgladman/Desktop/DevOps/rke2-automation/create-bastion/create-bastion-user-data.yml
+## need local key to ssh into bastion
+## need bastion key used for bastion to ssh into cluster nodes
+## need to update rke2-automation/create-bastion/create-bastion-user-data.yml with your AWS accounts data
 
-### checks to make sure arg is provide for stack name
-if [[ $# -eq "" ]] ; then
-    echo 'you must specify the cloudformation stack name'
-    exit 0
-fi
+## get stack file location
+echo "Enter file path for the stack to create bastion host: "
+echo "default = /Users/Philgladman/Desktop/DevOps/rke2-automation/create-bastion/create-bastion-user-data.yml"
+read -p "file location [press enter for default] : " STACK_FILE_LOCATION
+STACK_FILE_LOCATION=${STACK_FILE_LOCATION:-/Users/Philgladman/Desktop/DevOps/rke2-automation/create-bastion/create-bastion-user-data.yml}
 
-### put arg for stack name in variable
-export STACK_NAME=$1
+## Get stack name
+while true # infinite loop
+do
+    read -p "Enter stack name: " STACK_NAME
+    if [ -z "$STACK_NAME" ]
+    then
+        echo "Forgot to provide stack name" # output is empty - failure
+    else
+        break # file has output - success
+    fi
+done
 
 ### create cloudformation stack
 aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://$STACK_FILE_LOCATION --region us-east-1
@@ -49,8 +59,20 @@ done
 
 ### get BASTION public IP, and both keys into a variable
 export BASTION_PUBLIC_IP=$(aws ec2 describe-instances --query "Reservations[].Instances[].NetworkInterfaces[].Association.PublicIp" --filters Name=tag:Name,Values=bastion-host --output text --region us-east-1)
-export LOCAL_KEY=/Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-2022/aws-redhat-test/redhat_test.pem
-export BASTION_KEY=/Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-2022/aws-redhat-test/bastion_key.pem
+# export LOCAL_KEY=/Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-2022/aws-redhat-test/redhat_test.pem
+# export BASTION_KEY=/Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-2022/aws-redhat-test/bastion_key.pem
+
+## Get location of local key
+echo "Enter file path for the local SSH key: "
+echo "default = /Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-2022/aws-redhat-test/redhat_test.pem"
+read -p "file location [press enter for default] : " LOCAL_KEY
+LOCAL_KEY=${LOCAL_KEY:-/Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-2022/aws-redhat-test/redhat_test.pem}
+
+## Get location of local key
+echo "Enter file path bastion key to be copied over to bastion: "
+echo "default = /Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-2022/aws-redhat-test/bastion_key.pem"
+read -p "file location [press enter for default] : " BASTION_KEY
+BASTION_KEY=${BASTION_KEY:-/Users/Philgladman/Desktop/phils-scripts/phils-scripts/07-07-2022/aws-redhat-test/bastion_key.pem}
 
 ## run this command on mac to transfer bastion private key from mac to bastion
 while true # infinite loop
@@ -61,11 +83,11 @@ do
     then
         # SUCCESS
         echo " "
-        echo "file transfer Success"
+        echo "bastion key transfer Success"
         break
     else
         # FAIL
-        echo "ERROR ! file transfer FAILED... trying again"
+        echo "ERROR ! key transfer FAILED... trying again"
         sleep 2s
     fi
 done
